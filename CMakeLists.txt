@@ -8,17 +8,20 @@ if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
     endif()
 endif()
 
-project(vita_input_tester)
+project(flappy_vita)
 
 include("${VITASDK}/share/vita.cmake" REQUIRED)
 
 set(VITA_APP_NAME "FlappyVita")
-set(VITA_TITLEID "FLAPV01")
+set(VITA_TITLEID "FLAPV0001")
 set(VITA_VERSION "01.00")
 
 add_executable(${PROJECT_NAME} 
-src/main.c
-src/Timer.h)
+src/main.cpp
+src/Timer.h
+src/Bird.h
+src/Input.h
+src/Level.h)
 
 target_link_libraries(${PROJECT_NAME} 
 vita2d

@@ -9,7 +9,7 @@ class Bird
 public:
     Bird() : birdPosition(SCREEN_HEIGHT / 2.0f), birdVelocity(0.0f), birdAcceleration(0.0f) {};
 
-    void update(Input input, Level &level, float deltaTime)
+    void update(const Input &input, float deltaTime)
     {
         if (input.isPressed(SCE_CTRL_CROSS) && birdVelocity >= birdGravity / 10.0f)
         {
@@ -24,46 +24,29 @@ public:
 
         birdVelocity += birdAcceleration * deltaTime;
         birdPosition += birdVelocity * deltaTime;
-
-        int birdX = SCREEN_WIDTH / 5.0f;
-        level.update(140.0f, deltaTime, birdX);
-
-        level.repeatCheck();
-
-        if (birdPosition < 0 || birdPosition + 20 > SCREEN_HEIGHT || level.collides(birdX, birdPosition, 20, 20))
-        {
-            collided = true;
-        }
-
-        draw(level);
-    };
-
-    void draw(Level &level)
-    {
-        int birdX = SCREEN_WIDTH / 5.0f;
-        vita2d_draw_rectangle(birdX, birdPosition, 20, 20, BIRD_COLOR);
-        level.drawLevel();
     }
 
-    bool isCollided()
+    void draw() const
     {
-        return collided;
-    };
+        vita2d_draw_rectangle(x(), y(), width(), height(), BIRD_COLOR);
+    }
 
-    void reset(Level &level)
+    float x() const { return SCREEN_WIDTH / 5.0f; }
+    float y() const { return birdPosition; }
+    float width() const { return 20.0f; }
+    float height() const { return 20.0f; }
+
+    void reset()
     {
-        collided = false;
-        level.reset();
+        birdPosition = SCREEN_HEIGHT / 2.0f;
         birdVelocity = 0.0f;
         birdAcceleration = 0.0f;
-        birdPosition = SCREEN_HEIGHT / 2.0f;
-    };
+    }
 
 private:
-    float birdPosition;
-    float birdVelocity;
-    float birdAcceleration;
-    bool collided = true;
+    float birdPosition = SCREEN_HEIGHT / 2.0f;
+    float birdVelocity = 0.0f;
+    float birdAcceleration = 0.0f;
 
     float birdGravity = 1800.0f;
 };

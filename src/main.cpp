@@ -31,23 +31,35 @@ int main()
     Input input;
     Level level;
     int highScore = 0;
+    bool waitingForStart = true;
 
     // Main loop
     while (1)
     {
-        if (bird.isCollided())
+        bool collided = bird.y() < 0 || bird.y() + bird.height() > SCREEN_HEIGHT ||
+                        level.collides(bird.x(), bird.y(), bird.width(), bird.height());
+
+        if (waitingForStart || collided)
         {
             timer.update();
             input.update();
             if (input.isPressed(SCE_CTRL_CROSS))
-                bird.reset(level);
+            {
+                bird.reset();
+                level.reset();
+                waitingForStart = false;
+            }
 
             vita2d_start_drawing();
             vita2d_clear_screen();
-            bird.draw(level);
+
+            level.drawLevel();
+            bird.draw();
+
             drawScores(font, level.getScore(), highScore);
             vita2d_pgf_draw_text(font, 340, 280, RGBA8(255, 255, 255, 255), 1.0f,
                                  "Press X to start/restart");
+
             vita2d_end_drawing();
             vita2d_swap_buffers();
             sceKernelDelayThread(16000);
@@ -59,11 +71,19 @@ int main()
 
             vita2d_start_drawing();
             vita2d_clear_screen();
+
             input.update();
-            bird.update(input, level, deltaTime);
+            bird.update(input, deltaTime);
+            level.update(140.0f, deltaTime, bird.x());
+            level.repeatCheck();
+
             if (level.getScore() > highScore)
                 highScore = level.getScore();
             drawScores(font, level.getScore(), highScore);
+
+            bird.draw();
+            level.drawLevel();
+
             vita2d_end_drawing();
             vita2d_swap_buffers();
         }

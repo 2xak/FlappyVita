@@ -49,12 +49,9 @@ public:
         }
     }
 
-    int getScore() const
-    {
-        return currentScore;
-    }
+    int getScore() const { return currentScore; }
 
-    void drawLevel()
+    void drawLevel() const
     {
         int section = 0;
 
@@ -95,7 +92,7 @@ public:
 
     void reset()
     {
-        sectionHeights = {0, 0, 0, 0};
+        sectionHeights = {0, 0, (rand() % (SCREEN_HEIGHT - 250) <= 10) ? 0 : rand() % (SCREEN_HEIGHT - 250), (rand() % (SCREEN_HEIGHT - 250) <= 10) ? 0 : rand() % (SCREEN_HEIGHT - 250)};
         sectionScored = {false, false, false, false};
         levelPosition = 0.0f;
         currentScore = 0;

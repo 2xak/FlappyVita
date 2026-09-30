@@ -18,12 +18,12 @@ public:
         previousButtons = currentPad.buttons;
     }
 
-    bool isHeld(unsigned int mask)
+    bool isHeld(unsigned int mask) const
     {
         return (currentPad.buttons & mask) != 0;
     }
 
-    bool isPressed(unsigned int mask)
+    bool isPressed(unsigned int mask) const
     {
         return (pressedButtons & mask) != 0;
     }
